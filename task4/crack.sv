@@ -1,14 +1,166 @@
+`timescale 1ps / 1ps
+
 module crack(input logic clk, input logic rst_n,
              input logic en, output logic rdy,
              output logic [23:0] key, output logic key_valid,
              output logic [7:0] ct_addr, input logic [7:0] ct_rddata);
 
-    // your code here
+    // PT memory signals (arc4 writes the plaintext here)
+    logic [7:0] pt_addr, pt_rddata, pt_wrdata;
+    logic       pt_wren;
+
+    // Handshake signals between crack (caller) and arc4 (callee)
+    logic       a4_en, a4_rdy;
+
+    // bad = 1 if the current attempt wrote a character outside 'h20..'h7E
+    logic       bad;
+
+    // Controller states
+    typedef enum logic [1:0] {IDLE, START_ARC4, WAIT_ARC4, CHECK} state_type;
+
+    state_type state, next_state;
+
 
     // this memory must have the length-prefixed plaintext if key_valid
-    pt_mem pt( /* connect ports */ );
-    arc4 a4( /* connect ports */ );
+    pt_mem pt(.address(pt_addr), .clock(clk), .data(pt_wrdata), .wren(pt_wren), .q(pt_rddata));
 
-    // your code here
+    arc4 a4(.clk(clk), .rst_n(rst_n),
+            .en(a4_en), .rdy(a4_rdy),
+            .key(key),
+            .ct_addr(ct_addr), .ct_rddata(ct_rddata),
+            .pt_addr(pt_addr), .pt_rddata(pt_rddata), .pt_wrdata(pt_wrdata), .pt_wren(pt_wren));
+
+
+    // State register
+    always_ff @(posedge clk, negedge rst_n) begin
+        if (!rst_n)
+            state <= IDLE;
+        else
+            state <= next_state;
+    end
+
+    // Next-state logic
+    always_comb begin
+        next_state = state;
+        case (state)
+            IDLE:       if (en)     next_state = START_ARC4;   // a request has arrived
+            START_ARC4: if (a4_rdy) next_state = WAIT_ARC4;    // a4_en goes out this cycle
+            WAIT_ARC4:  if (a4_rdy) next_state = CHECK;        // arc4 finished decrypting with this key
+            CHECK:
+                begin
+                if (!bad)                       // every character was readable: key found
+                    next_state = IDLE;
+                else if (key == 24'hFFFFFF)     // last key tried and it failed: give up
+                    next_state = IDLE;
+                else                            // try the next key
+                    next_state = START_ARC4;
+                end
+            default:    next_state = IDLE;
+        endcase
+    end
+
+    // Datapath registers: key, key_valid, bad
+    always_ff @(posedge clk, negedge rst_n) begin
+        if (!rst_n)
+             begin
+                key       <= 24'd0;
+                key_valid <= 1'b0;
+                bad       <= 1'b0;
+            end
+
+        else
+            begin
+            case (state)
+                IDLE:
+                    begin
+                        if (en)
+                            begin               // start a new search from key 0
+                                key       <= 24'd0;
+                                key_valid <= 1'b0;
+                                bad       <= bad;
+                            end
+                        else
+                            begin               // no request: hold (key and key_valid keep the last result)
+                                key       <= key;
+                                key_valid <= key_valid;
+                                bad       <= bad;
+                            end
+                    end
+                START_ARC4:
+                    begin                       // new attempt: nothing bad seen yet
+                        key       <= key;
+                        key_valid <= key_valid;
+                        bad       <= 1'b0;
+                    end
+                WAIT_ARC4:
+                    begin                       // arc4 is writing PT: watch every character it writes
+                        key       <= key;
+                        key_valid <= key_valid;
+                        if (pt_wren && (pt_addr != 8'd0) && ((pt_wrdata < 8'h20) || (pt_wrdata > 8'h7E)))
+                            bad   <= 1'b1;      // unreadable character (address 0 is the length, so it is skipped)
+                        else
+                            bad   <= bad;
+                    end
+                CHECK:
+                    begin
+                        if (!bad)
+                            begin               // key found: keep this key, mark it valid
+                                key       <= key;
+                                key_valid <= 1'b1;
+                                bad       <= bad;
+                            end
+                        else if (key == 24'hFFFFFF)
+                            begin               // searched everything, nothing found: key_valid stays 0
+                                key       <= key;
+                                key_valid <= 1'b0;
+                                bad       <= bad;
+                            end
+                        else
+                            begin               // wrong key: move to the next one
+                                key       <= key + 24'd1;
+                                key_valid <= key_valid;
+                                bad       <= bad;
+                            end
+                    end
+                default:
+                    begin                       // unused encodings: hold
+                        key       <= key;
+                        key_valid <= key_valid;
+                        bad       <= bad;
+                    end
+            endcase
+        end
+    end
+
+    // Output Logic
+    always_comb begin
+        case (state)
+            IDLE:
+                begin                              // waiting for a request: crack is ready, arc4 is not started
+                    rdy   = 1'b1;
+                    a4_en = 1'b0;
+                end
+            START_ARC4:
+                begin                              // request arc4 for one cycle, only once it is ready
+                    rdy   = 1'b0;
+                    a4_en = a4_rdy;
+                end
+            WAIT_ARC4:
+                begin                              // arc4 is decrypting
+                    rdy   = 1'b0;
+                    a4_en = 1'b0;
+                end
+            CHECK:
+                begin                              // deciding: found, give up, or next key
+                    rdy   = 1'b0;
+                    a4_en = 1'b0;
+                end
+            default:
+                begin                              // unused encodings: do nothing
+                    rdy   = 1'b0;
+                    a4_en = 1'b0;
+                end
+        endcase
+    end
 
 endmodule: crack
