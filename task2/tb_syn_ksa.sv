@@ -52,8 +52,7 @@ module tb_syn_ksa();
         // Check the complete handout result.
         for (index = 0; index < 256; index = index + 1) begin
             if (s_mem[index] !== expected_mem[index]) begin
-                $display("ERROR: S[%0d] = %h, expected %h",
-                         index, s_mem[index], expected_mem[index]);
+                $display("ERROR: S[%0d] = %h, expected %h", index, s_mem[index], expected_mem[index]);
                 errors = errors + 1;
             end
         end

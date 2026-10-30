@@ -51,8 +51,7 @@ module tb_rtl_crack();
             errors = errors + 1;
         end
         if (key_valid !== 1'b1 || key !== 24'h000001) begin
-            $display("ERROR: crack returned key=%h valid=%b, expected 000001/1",
-                     key, key_valid);
+            $display("ERROR: crack returned key=%h valid=%b, expected 000001/1", key, key_valid);
             errors = errors + 1;
         end
 

@@ -29,8 +29,7 @@ module tb_rtl_task4();
 
         // Load the handout's Sentence 1 after the generated CT initializes.
         #20;
-        $readmemh("sentence1.memh",
-            dut.ct.altsyncram_component.m_default.altsyncram_inst.mem_data);
+        $readmemh("sentence1.memh", dut.ct.altsyncram_component.m_default.altsyncram_inst.mem_data);
         repeat (2) @(negedge CLOCK_50);
 
         // Displays must be blank before and while cracking.
@@ -51,16 +50,14 @@ module tb_rtl_task4();
         end
 
         // Key 000001 must appear left-to-right on HEX5..HEX0.
-        if (HEX5 !== DIGIT_0 || HEX4 !== DIGIT_0 || HEX3 !== DIGIT_0 ||
-            HEX2 !== DIGIT_0 || HEX1 !== DIGIT_0 || HEX0 !== DIGIT_1) begin
+        if (HEX5 !== DIGIT_0 || HEX4 !== DIGIT_0 || HEX3 !== DIGIT_0 || HEX2 !== DIGIT_0 || HEX1 !== DIGIT_0 || HEX0 !== DIGIT_1) begin
             $display("ERROR: displays did not show key 000001");
             errors = errors + 1;
         end
 
         // Also check the plaintext stored inside crack, as required by the lab.
         for (index = 0; index < expected_text.len(); index = index + 1) begin
-            if (dut.c.pt.altsyncram_component.m_default.altsyncram_inst.mem_data[index + 1]
-                !== expected_text[index]) begin
+            if (dut.c.pt.altsyncram_component.m_default.altsyncram_inst.mem_data[index + 1] !== expected_text[index]) begin
                 $display("ERROR: task4 PT character %0d is incorrect", index);
                 errors = errors + 1;
             end

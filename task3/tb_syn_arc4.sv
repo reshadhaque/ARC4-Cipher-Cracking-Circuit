@@ -64,8 +64,7 @@ module tb_syn_arc4();
         end
         for (index = 0; index < expected_text.len(); index = index + 1) begin
             if (pt_mem[index + 1] !== expected_text[index]) begin
-                $display("ERROR: PT character %0d was %h, expected %h",
-                         index, pt_mem[index + 1], expected_text[index]);
+                $display("ERROR: PT character %0d was %h, expected %h", index, pt_mem[index + 1], expected_text[index]);
                 errors = errors + 1;
             end
         end

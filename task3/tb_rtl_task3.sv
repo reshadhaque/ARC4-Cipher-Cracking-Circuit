@@ -25,8 +25,7 @@ module tb_rtl_task3();
 
         // Wait for the generated memory's own initial block, then load test2.
         #20;
-        $readmemh("test2.memh",
-            dut.ct.altsyncram_component.m_default.altsyncram_inst.mem_data);
+        $readmemh("test2.memh", dut.ct.altsyncram_component.m_default.altsyncram_inst.mem_data);
         repeat (2) @(negedge CLOCK_50);
         KEY[1] = 1'b1;
 
@@ -41,17 +40,13 @@ module tb_rtl_task3();
             errors = errors + 1;
         end
 
-        if (dut.pt.altsyncram_component.m_default.altsyncram_inst.mem_data[0]
-            !== expected_text.len()) begin
+        if (dut.pt.altsyncram_component.m_default.altsyncram_inst.mem_data[0] !== expected_text.len()) begin
             $display("ERROR: task3 wrote the wrong PT length");
             errors = errors + 1;
         end
         for (index = 0; index < expected_text.len(); index = index + 1) begin
-            if (dut.pt.altsyncram_component.m_default.altsyncram_inst.mem_data[index + 1]
-                !== expected_text[index]) begin
-                $display("ERROR: PT character %0d was %h, expected %h", index,
-                    dut.pt.altsyncram_component.m_default.altsyncram_inst.mem_data[index + 1],
-                    expected_text[index]);
+            if (dut.pt.altsyncram_component.m_default.altsyncram_inst.mem_data[index + 1]!== expected_text[index]) begin
+                $display("ERROR: PT character %0d was %h, expected %h", index,dut.pt.altsyncram_component.m_default.altsyncram_inst.mem_data[index + 1], expected_text[index]);
                 errors = errors + 1;
             end
         end

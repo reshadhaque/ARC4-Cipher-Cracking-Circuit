@@ -60,8 +60,7 @@ module tb_rtl_ksa();
         // Compare all 256 bytes with the exact table in the lab manual.
         for (index = 0; index < 256; index = index + 1) begin
             if (s_mem[index] !== expected_mem[index]) begin
-                $display("ERROR: S[%0d] = %h, expected %h",
-                         index, s_mem[index], expected_mem[index]);
+                $display("ERROR: S[%0d] = %h, expected %h", index, s_mem[index], expected_mem[index]);
                 errors = errors + 1;
             end
         end

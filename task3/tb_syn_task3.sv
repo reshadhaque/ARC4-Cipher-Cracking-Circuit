@@ -44,14 +44,12 @@ module tb_syn_task3();
         repeat (4000) @(negedge CLOCK_50);
 
         if (read_pt(0) !== expected_text.len()) begin
-            $display("ERROR: PT length was %0d, expected %0d",
-                     read_pt(0), expected_text.len());
+            $display("ERROR: PT length was %0d, expected %0d", read_pt(0), expected_text.len());
             errors = errors + 1;
         end
         for (index = 0; index < expected_text.len(); index = index + 1) begin
             if (read_pt(index + 1) !== expected_text[index]) begin
-                $display("ERROR: PT character %0d was %h, expected %h",
-                         index, read_pt(index + 1), expected_text[index]);
+                $display("ERROR: PT character %0d was %h, expected %h", index, read_pt(index + 1), expected_text[index]);
                 errors = errors + 1;
             end
         end

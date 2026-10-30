@@ -39,8 +39,7 @@ module tb_syn_init();
 
         for (expected = 0; expected < 256; expected = expected + 1) begin
             if (wren !== 1'b1 || addr !== expected[7:0] || wrdata !== expected[7:0]) begin
-                $display("ERROR: write %0d had wren=%b addr=%0d data=%0d",
-                         expected, wren, addr, wrdata);
+                $display("ERROR: write %0d had wren=%b addr=%0d data=%0d", expected, wren, addr, wrdata);
                 errors = errors + 1;
             end
             @(negedge clk);

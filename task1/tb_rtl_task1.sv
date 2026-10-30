@@ -39,11 +39,8 @@ module tb_rtl_task1();
 
         // Check every location in the generated S memory.
         for (address = 0; address < 256; address = address + 1) begin
-            if (dut.s.altsyncram_component.m_default.altsyncram_inst.mem_data[address]
-                !== address[7:0]) begin
-                $display("ERROR: S[%0d] = %h, expected %h", address,
-                    dut.s.altsyncram_component.m_default.altsyncram_inst.mem_data[address],
-                    address[7:0]);
+            if (dut.s.altsyncram_component.m_default.altsyncram_inst.mem_data[address] !== address[7:0]) begin
+                $display("ERROR: S[%0d] = %h, expected %h", address, dut.s.altsyncram_component.m_default.altsyncram_inst.mem_data[address], address[7:0]);
                 errors = errors + 1;
             end
         end

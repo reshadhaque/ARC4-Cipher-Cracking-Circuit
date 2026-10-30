@@ -40,11 +40,8 @@ module tb_rtl_task2();
 
         // The final S memory must match the handout table for key 00033C.
         for (index = 0; index < 256; index = index + 1) begin
-            if (dut.s.altsyncram_component.m_default.altsyncram_inst.mem_data[index]
-                !== expected_mem[index]) begin
-                $display("ERROR: S[%0d] = %h, expected %h", index,
-                    dut.s.altsyncram_component.m_default.altsyncram_inst.mem_data[index],
-                    expected_mem[index]);
+            if (dut.s.altsyncram_component.m_default.altsyncram_inst.mem_data[index] !== expected_mem[index]) begin
+                $display("ERROR: S[%0d] = %h, expected %h", index, dut.s.altsyncram_component.m_default.altsyncram_inst.mem_data[index], expected_mem[index]);
                 errors = errors + 1;
             end
         end

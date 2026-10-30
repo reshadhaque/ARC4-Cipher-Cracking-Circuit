@@ -46,8 +46,7 @@ module tb_syn_task2();
         // Check all 256 entries against the table supplied in the handout.
         for (address = 0; address < 256; address = address + 1) begin
             if (read_s(address) !== expected_mem[address]) begin
-                $display("ERROR: S[%0d] = %h, expected %h",
-                         address, read_s(address), expected_mem[address]);
+                $display("ERROR: S[%0d] = %h, expected %h", address, read_s(address), expected_mem[address]);
                 errors = errors + 1;
             end
         end

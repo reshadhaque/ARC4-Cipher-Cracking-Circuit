@@ -45,8 +45,7 @@ module tb_syn_task1();
         // Exhaustively check the result: every S address contains its index.
         for (address = 0; address < 256; address = address + 1) begin
             if (read_s(address) !== address[7:0]) begin
-                $display("ERROR: S[%0d] = %h, expected %h",
-                         address, read_s(address), address[7:0]);
+                $display("ERROR: S[%0d] = %h, expected %h", address, read_s(address), address[7:0]);
                 errors = errors + 1;
             end
         end

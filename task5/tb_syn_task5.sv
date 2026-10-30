@@ -42,8 +42,7 @@ module tb_syn_task5();
             $display("ERROR: synthesized task5 timed out");
             errors = errors + 1;
         end
-        if (HEX5 !== DIGIT_0 || HEX4 !== DIGIT_0 || HEX3 !== DIGIT_0 ||
-            HEX2 !== DIGIT_0 || HEX1 !== DIGIT_1 || HEX0 !== DIGIT_8) begin
+        if (HEX5 !== DIGIT_0 || HEX4 !== DIGIT_0 || HEX3 !== DIGIT_0 || HEX2 !== DIGIT_0 || HEX1 !== DIGIT_1 || HEX0 !== DIGIT_8) begin
             $display("ERROR: displays did not show key 000018");
             errors = errors + 1;
         end

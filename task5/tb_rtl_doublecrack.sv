@@ -57,10 +57,7 @@ module tb_rtl_doublecrack();
             errors = errors + 1;
         end
         for (index = 0; index < odd_text.len(); index = index + 1) begin
-            if (dut.pt.altsyncram_component.m_default.altsyncram_inst.mem_data[index + 1]
-                !== odd_text[index] ||
-                dut.c2.pt.altsyncram_component.m_default.altsyncram_inst.mem_data[index + 1]
-                !== odd_text[index]) begin
+            if (dut.pt.altsyncram_component.m_default.altsyncram_inst.mem_data[index + 1] !== odd_text[index] || dut.c2.pt.altsyncram_component.m_default.altsyncram_inst.mem_data[index + 1] !== odd_text[index]) begin
                 $display("ERROR: odd winner/shared PT character %0d is incorrect", index);
                 errors = errors + 1;
             end
@@ -80,10 +77,7 @@ module tb_rtl_doublecrack();
             errors = errors + 1;
         end
         for (index = 0; index < even_text.len(); index = index + 1) begin
-            if (dut.pt.altsyncram_component.m_default.altsyncram_inst.mem_data[index + 1]
-                !== even_text[index] ||
-                dut.c1.pt.altsyncram_component.m_default.altsyncram_inst.mem_data[index + 1]
-                !== even_text[index]) begin
+            if (dut.pt.altsyncram_component.m_default.altsyncram_inst.mem_data[index + 1] !== even_text[index] || dut.c1.pt.altsyncram_component.m_default.altsyncram_inst.mem_data[index + 1] !== even_text[index]) begin
                 $display("ERROR: even winner/shared PT character %0d is incorrect", index);
                 errors = errors + 1;
             end

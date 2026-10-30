@@ -63,8 +63,7 @@ module tb_syn_prga();
         end
 
         if (pt_mem[0] !== 8'd2 || pt_mem[1] !== 8'h43 || pt_mem[2] !== 8'h47) begin
-            $display("ERROR: PT was %h %h %h, expected 02 43 47",
-                     pt_mem[0], pt_mem[1], pt_mem[2]);
+            $display("ERROR: PT was %h %h %h, expected 02 43 47", pt_mem[0], pt_mem[1], pt_mem[2]);
             errors = errors + 1;
         end
         if (s_mem[2] !== 8'd3 || s_mem[3] !== 8'd2) begin
