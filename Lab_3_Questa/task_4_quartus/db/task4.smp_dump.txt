@@ -1,0 +1,39 @@
+
+State Machine - |task4|crack:c|state
+Name state.CHECK state.WAIT_ARC4 state.START_ARC4 state.IDLE 
+state.IDLE 0 0 0 0 
+state.START_ARC4 0 0 1 1 
+state.WAIT_ARC4 0 1 0 1 
+state.CHECK 1 0 0 1 
+
+State Machine - |task4|crack:c|arc4:a4|state
+Name state.WAIT_PRGA state.START_PRGA state.WAIT_KSA state.START_KSA state.WAIT_INIT state.START_INIT state.IDLE 
+state.IDLE 0 0 0 0 0 0 0 
+state.START_INIT 0 0 0 0 0 1 1 
+state.WAIT_INIT 0 0 0 0 1 0 1 
+state.START_KSA 0 0 0 1 0 0 1 
+state.WAIT_KSA 0 0 1 0 0 0 1 
+state.START_PRGA 0 1 0 0 0 0 1 
+state.WAIT_PRGA 1 0 0 0 0 0 1 
+
+State Machine - |task4|crack:c|arc4:a4|prga:p|state
+Name state.WRITE_PT state.READ_PAD state.WRITE_SJ state.WRITE_SI state.READ_SJ state.CALC_J state.READ_SI state.WRITE_LEN state.READ_LEN state.IDLE 
+state.IDLE 0 0 0 0 0 0 0 0 0 0 
+state.READ_LEN 0 0 0 0 0 0 0 0 1 1 
+state.WRITE_LEN 0 0 0 0 0 0 0 1 0 1 
+state.READ_SI 0 0 0 0 0 0 1 0 0 1 
+state.CALC_J 0 0 0 0 0 1 0 0 0 1 
+state.READ_SJ 0 0 0 0 1 0 0 0 0 1 
+state.WRITE_SI 0 0 0 1 0 0 0 0 0 1 
+state.WRITE_SJ 0 0 1 0 0 0 0 0 0 1 
+state.READ_PAD 0 1 0 0 0 0 0 0 0 1 
+state.WRITE_PT 1 0 0 0 0 0 0 0 0 1 
+
+State Machine - |task4|crack:c|arc4:a4|ksa:k|state
+Name state.WRITE_SJ state.WRITE_SI state.READ_SJ state.CALC_J state.READ_SI state.IDLE 
+state.IDLE 0 0 0 0 0 0 
+state.READ_SI 0 0 0 0 1 1 
+state.CALC_J 0 0 0 1 0 1 
+state.READ_SJ 0 0 1 0 0 1 
+state.WRITE_SI 0 1 0 0 0 1 
+state.WRITE_SJ 1 0 0 0 0 1 

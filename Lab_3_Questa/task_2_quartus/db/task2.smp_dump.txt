@@ -1,0 +1,17 @@
+
+State Machine - |task2|state
+Name state.WAIT_KSA state.START_KSA state.WAIT_INIT state.START_INIT state.DONE 
+state.START_INIT 0 0 0 0 0 
+state.WAIT_INIT 0 0 1 1 0 
+state.START_KSA 0 1 0 1 0 
+state.WAIT_KSA 1 0 0 1 0 
+state.DONE 0 0 0 1 1 
+
+State Machine - |task2|ksa:k|state
+Name state.WRITE_SJ state.WRITE_SI state.READ_SJ state.CALC_J state.READ_SI state.IDLE 
+state.IDLE 0 0 0 0 0 0 
+state.READ_SI 0 0 0 0 1 1 
+state.CALC_J 0 0 0 1 0 1 
+state.READ_SJ 0 0 1 0 0 1 
+state.WRITE_SI 0 1 0 0 0 1 
+state.WRITE_SJ 1 0 0 0 0 1 
